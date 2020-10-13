@@ -1,5 +1,4 @@
 ﻿using CmsShop.Models.Data;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace CmsShop.Models.ViewModels.Pages
