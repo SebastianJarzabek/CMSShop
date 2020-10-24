@@ -1,6 +1,7 @@
 ﻿using CmsShop.Models.Data;
 using CmsShop.Models.ViewModels.Pages;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure.MappingViews;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -229,6 +230,47 @@ namespace CmsShop.Areas.Admin.Controllers
 
       return View();
     }
+
+    //GET: Admin/Pages/EditSidebar
+    [HttpGet]
+    public ActionResult EditSidebar()
+    {
+      //Deklaracja Sidebar
+      SidebarVM model;
+
+      using (Db db = new Db())
+      {
+        //Pobieramy SidebarDTO
+        SidebarDTO dto = db.Sidebar.Find(1);
+
+        //Inicializacja modelu
+        model = new SidebarVM(dto);
+      }
+      return View(model);
+    }
+
+    //POST: Admin/Pages/EditSidebar
+    [HttpPost]
+    public ActionResult EditSidebar(SidebarVM model)
+    {
+      using (Db db = new Db())
+      {
+        //Pobieramy SidebarDTO
+        SidebarDTO dto = db.Sidebar.Find(1);
+
+        //modyfikacja Sidebar
+        dto.Body = model.Body;
+        //Zapisujemy na bazie
+        db.SaveChanges();
+      }
+
+      //Ustawiamy tempdata o zmodyfikowaniu
+
+      TempData["SM"] = "Zmodyfikowano pasek boczny.";
+
+      return RedirectToAction("EditSidebar");
+    }
+
 
     private string StartWithValidation(string validHelper)
     {
