@@ -1,6 +1,7 @@
 ﻿using CmsShop.Models.Data;
 using CmsShop.Models.ViewModels.Pages;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -85,6 +86,7 @@ namespace CmsShop.Areas.Admin.Controllers
       return RedirectToAction("AddPAge");
     }
 
+    [HttpGet]
     public ActionResult EditPage(int id)
     {
       //Deklaracja pageVM
@@ -101,24 +103,78 @@ namespace CmsShop.Areas.Admin.Controllers
         }
         //Przypisujemy i zwracamy do widoku.
         model = new PageVM(dto);
+      }
+      return View(model);
+    }
 
-
+    [HttpPost]
+    public ActionResult EditPage(PageVM model)
+    {
+      if (!ModelState.IsValid)
+      {
+        return (View(model));
       }
 
+      using (Db db = new Db())
+      {
+        // Pobieramy id
 
-      return View(model);
+        int id = model.Id;
+        string slug = string.Empty;
+
+        //pobranie strony do edycji
+        PageDTO dto = db.Pages.Find(id);
+
+        dto.Title = model.Title;
+        if (model.Slug != "home")
+        {
+          if (string.IsNullOrWhiteSpace(model.Slug))
+          {
+            var validHelper = model.Title.Replace(" ", "-").ToLower();
+            slug = StartWithValidation(validHelper);
+          }
+          else
+          {
+            var validHelper = model.Slug.Replace(" ", "-").ToLower();
+            slug = StartWithValidation(validHelper);
+          }
+        }
+
+        // Sprawdzamy czy nasza strona lub adres juz isnieje 
+        if (db.Pages.Where(x => x.Id != id).Any(x => x.Title == model.Title)
+         || db.Pages.Where(x => x.Id != id).Any(x => x.Title == slug))
+        {
+          ModelState.AddModelError("", "Strona lub tytuł już istnieje.");
+        }
+
+        //Modyfikacja DTO
+        dto.Title = model.Title;
+        dto.Slug = model.Slug;
+        dto.Body = model.Body;
+        dto.HasSidebar = model.HasSidebar;
+
+        // Zapis edytowanej strony do bazy
+        db.SaveChanges();
+      }
+
+      TempData["SM"] = "Strona została wyedytowana";
+      //Resirect
+
+      
+      return RedirectToAction("EditPage");
     }
 
     private string StartWithValidation(string validHelper)
     {
-      string validString;
+      string _validString = string.Empty;
+
       if (validHelper.StartsWith("-"))
       {
-        return validString = validHelper.Remove(0, 1);
+        return _validString = validHelper.Remove(0, 1);
       }
       else
       {
-        return validString = validHelper;
+        return _validString = validHelper;
       }
     }
   }
