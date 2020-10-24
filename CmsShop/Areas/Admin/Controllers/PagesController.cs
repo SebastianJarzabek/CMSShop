@@ -1,7 +1,6 @@
 ﻿using CmsShop.Models.Data;
 using CmsShop.Models.ViewModels.Pages;
 using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -86,6 +85,7 @@ namespace CmsShop.Areas.Admin.Controllers
       return RedirectToAction("AddPAge");
     }
 
+    // GET: Admin/Pages/EditPage
     [HttpGet]
     public ActionResult EditPage(int id)
     {
@@ -107,6 +107,7 @@ namespace CmsShop.Areas.Admin.Controllers
       return View(model);
     }
 
+    // POST: Admin/Pages/EditPage
     [HttpPost]
     public ActionResult EditPage(PageVM model)
     {
@@ -160,9 +161,33 @@ namespace CmsShop.Areas.Admin.Controllers
       TempData["SM"] = "Strona została wyedytowana";
       //Resirect
 
-      
+
       return RedirectToAction("EditPage");
     }
+
+
+    // GET: Admin/Pages/details
+    public ActionResult Details(int id)
+    {
+      PageVM model;
+
+      using (Db db = new Db())
+      {
+        // Pobranie strony o id 
+        PageDTO dto = db.Pages.Find(id);
+
+        //Sprawdzenie czy strona o id istnieje
+        if (dto == null)
+        {
+          return Content("Strona o podanym ID nie istnieje!");
+        }
+
+        //Inicializacja PageVM
+        model = new PageVM();
+      }
+      return View(model);
+    }
+
 
     private string StartWithValidation(string validHelper)
     {
