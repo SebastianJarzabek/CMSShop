@@ -170,22 +170,24 @@ namespace CmsShop.Areas.Admin.Controllers
     [HttpGet]
     public ActionResult Details(int id)
     {
+      //deklaracja PageVM
       PageVM model;
 
       using (Db db = new Db())
       {
-        // Pobranie strony o id 
+        // Pobranie strony o id
         PageDTO dto = db.Pages.Find(id);
 
-        //Sprawdzenie czy strona o id istnieje
+        // sprawdzenie czy strona o takim id istnieje
         if (dto == null)
         {
-          return Content("Strona o podanym ID nie istnieje!");
+          return Content("Strona o podanym id nie istnieje.");
         }
 
-        //Inicializacja PageVM
-        model = new PageVM();
+        // inicjalizacja PageVM
+        model = new PageVM(dto);
       }
+
       return View(model);
     }
 
