@@ -1,7 +1,6 @@
 ﻿using CmsShop.Models.Data;
 using CmsShop.Models.ViewModels.Pages;
 using System.Collections.Generic;
-using System.Data.Entity.Infrastructure.MappingViews;
 using System.Linq;
 using System.Web.Mvc;
 
