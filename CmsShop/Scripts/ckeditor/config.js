@@ -8,4 +8,11 @@ CKEDITOR.editorConfig = function( config )
 	// Define changes to default configuration here. For example:
 	// config.language = 'fr';
 	// config.uiColor = '#AADC6E';
+
+	//Konfiguracja Fileman manager dla zarządzania obrazkami.
+
+	var roxyFileman = '/fileman/index.html?integration=ckeditor';
+	config.filebrowserBrowseUrl = roxyFileman;
+	config.filebrowserImageBrowseUrl = roxyFileman + '&type=image';
+	config.removeDialogTabs = 'link:upload;image:upload';
 };
