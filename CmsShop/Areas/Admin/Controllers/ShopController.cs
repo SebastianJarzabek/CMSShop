@@ -83,10 +83,12 @@ namespace CmsShop.Areas.Admin.Controllers
       return RedirectToAction("Categories");
     }
 
-    //POST: Admin/Shop/AddNewCategory
+    //POST: Admin/Shop/RenameCategory
     [HttpPost]
-    public ActionResult snippet()
+    public ActionResult RenameCategory()
     {
+
+
       return View();
     }
 
