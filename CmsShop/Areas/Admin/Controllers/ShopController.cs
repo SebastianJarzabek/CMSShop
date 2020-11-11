@@ -3,7 +3,6 @@ using CmsShop.Models.ViewModels.Shop;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Web.Mvc;
 
 namespace CmsShop.Areas.Admin.Controllers
@@ -85,11 +84,21 @@ namespace CmsShop.Areas.Admin.Controllers
 
     //POST: Admin/Shop/RenameCategory
     [HttpPost]
-    public ActionResult RenameCategory()
+    public string RenameCategory(string newCatName, int id)
     {
+      using (Db db = new Db())
+      {
+        if (db.Categories.Any(X => X.Name == newCatName))
+        {
+          return "tytulzajety";
+        }
 
-
-      return View();
+        CategoryDTO dto = db.Categories.Find(id);
+        dto.Name = newCatName;
+        dto.Slug = newCatName.Replace(" ", "-").ToLower();
+        db.SaveChanges();
+      }
+      return "Ok";
     }
 
 
