@@ -100,9 +100,5 @@ namespace CmsShop.Areas.Admin.Controllers
       }
       return "Ok";
     }
-
-
-
-
   }
 }
